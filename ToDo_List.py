@@ -1,3 +1,5 @@
+from colorama import Fore as fore
+
 class ToDoList:
     def __init__(self) -> None:
         self.tasks = []
@@ -5,8 +7,11 @@ class ToDoList:
     
     def addtasks(self):
         task = input("Enter the task: ")
-        self.tasks.append([task, "progress"])
-        print("---Task added successfully---")
+        if task != "":
+            self.tasks.append([task, "progress"])
+            print(f"{fore.GREEN}---Task added successfully---")
+        else:
+            print(f"{fore.RED}Empty task name is ignored{fore.WHITE}")
     
     def viewtasks(self, category="All"):
         f = 0
@@ -14,19 +19,14 @@ class ToDoList:
             if len(self.tasks) > 0:
                 f = 1
             for i in range(len(self.tasks)):
-                print(f"[{i + 1}] => {self.tasks[i][0]} => {self.tasks[i][1]}")
-        elif category == "progress":
+                print(f"{fore.YELLOW}[{i + 1}] => {self.tasks[i][0]} => {self.tasks[i][1]}{fore.WHITE}")
+        else:
             for i in range(len(self.tasks)):
-                if self.tasks[i][1] == "progress":
-                    print(f"[{i + 1}] => {self.tasks[i][0]}")
-                    f = 1
-        elif category == "completed":
-            for i in range(len(self.tasks)):
-                if self.tasks[i][1] == "completed":
-                    print(f"[{i + 1}] => {self.tasks[i][0]}")
+                if self.tasks[i][1] == category:
+                    print(f"{fore.YELLOW}[{i + 1}] => {self.tasks[i][0]}{fore.WHITE}")
                     f = 1
         if f == 0:
-            print("Nothing to display")
+            print(f"{fore.RED}Nothing to display")
         return f
     
     def deletetask(self):
@@ -34,13 +34,13 @@ class ToDoList:
             self.viewtasks()
             ind = int(input("Enter the index of the task: ")) - 1
             if len(self.tasks) < ind or ind < 0:
-                print("The given index is out of range.")
+                print(f"{fore.RED}The given index is out of range.")
                 return
             else:
                 self.tasks.pop(ind)
-                print("---Task deleted successfully---")
+                print(f"{fore.GREEN}---Task deleted successfully---")
         else:
-            print("The list is empty. Nothing to delete.")
+            print(f"{fore.RED}The list is empty. Nothing to delete.")
             return
 
     def markascomplete(self):
@@ -49,25 +49,25 @@ class ToDoList:
             if f:
                 ind = int(input("Enter the index of the task: ")) - 1
                 if len(self.tasks) < ind or ind < 0:
-                    print("The given index is out of range.")
+                    print(f"{fore.RED}The given index is out of range.")
                     return
                 else:
                     self.tasks[ind][1] = "completed"
-                    print("---Task marked as completed successfully---")
+                    print(f"{fore.GREEN}---Task marked as completed successfully---")
         else:
-            print("The list is empty. Nothing to update.")
+            print(f"{fore.RED}The list is empty. Nothing to update.")
             return
         
     def menu(self):
-        print("-----Menu-----")
-        print("""
+        print(f"{fore.BLUE}-----Menu-----")
+        print(f"""{fore.BLUE}
 [1] Add a Task
 [2] Delete a Task
 [3] Display all Tasks
 [4] Display Tasks in Progress
 [5] Display Tasks that are Completed
 [6] Mark as Complete a Task
-[7] Exit""")
+[7] Exit{fore.WHITE}""")
         ch = int(input("Enter your choice: "))
         if ch == 1:
             self.addtasks()
@@ -82,7 +82,7 @@ class ToDoList:
         elif ch == 6:
             self.markascomplete()
         elif ch == 7:
-            print("Closing...")
+            print(f"{fore.GREEN}Closing...{fore.WHITE}")
             self.loop = False
         else:
             print("The choice is not valid.")
